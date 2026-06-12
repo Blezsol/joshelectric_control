@@ -1,0 +1,20 @@
+{
+    "name": "JoshElectric Control",
+    "short_name": "JoshElectric",
+    "description": "Professional Electric Load Management System for Nigerian Homes",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#1e3a8a",
+    "theme_color": "#1e3a8a",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "assets/logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["utilities", "productivity"],
+    "lang": "en-NG"
+}

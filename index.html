@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JoshElectric Control - Professional Electric Load Management System for Nigerian Homes">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="manifest" href="manifest.json">
+    <title>JoshElectric Control | Electric Load Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <rect width="60" height="60" rx="15" fill="#1e3a8a"/>
+                    <text x="30" y="42" text-anchor="middle" fill="white" font-size="32" font-weight="900">J</text>
+                    <circle cx="48" cy="12" r="6" fill="#f59e0b"/>
+                </svg>
+            </div>
+            <div class="spinner"></div>
+            <p>Loading JoshElectric Control...</p>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a href="index.html" class="brand-logo">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="url(#logoGrad)"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#1e3a8a"/>
+                            <stop offset="100%" stop-color="#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <div class="logo-text">
+                    <span class="logo-main">JoshElectric</span>
+                    <span class="logo-sub">CONTROL</span>
+                </div>
+            </a>
+        </div>
+        
+        <nav class="nav-links" id="mainNav">
+            <a href="index.html" class="nav-link active">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            
+            <div class="nav-dropdown">
+                <button class="nav-link dropdown-toggle">
+                    <i class="fas fa-plug"></i> Load Management
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="pages/load-modelling.html" class="dropdown-item">
+                        <i class="fas fa-microchip"></i> Load Modelling
+                    </a>
+                    <a href="pages/analytics.html" class="dropdown-item">
+                        <i class="fas fa-chart-line"></i> Analytics & Predictions
+                    </a>
+                    <a href="pages/comparative-analysis.html" class="dropdown-item">
+                        <i class="fas fa-balance-scale"></i> Comparative Analysis
+                    </a>
+                    <a href="pages/reports.html" class="dropdown-item">
+                        <i class="fas fa-file-pdf"></i> Reports
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <button class="nav-link dropdown-toggle">
+                    <i class="fas fa-users"></i> Users
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="pages/multi-user.html" class="dropdown-item">
+                        <i class="fas fa-user-cog"></i> User Management
+                    </a>
+                    <a href="pages/history.html" class="dropdown-item">
+                        <i class="fas fa-history"></i> Session History
+                    </a>
+                </div>
+            </div>
+            
+            <a href="pages/settings.html" class="nav-link">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+        
+        <div class="nav-actions">
+            <button class="icon-button" id="darkModeToggle" title="Toggle Dark Mode" aria-label="Dark mode toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <button class="icon-button" id="notificationBtn" title="Notifications" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="badge" id="notificationBadge">0</span>
+            </button>
+            
+            <div id="authArea">
+                <div id="notLoggedIn">
+                    <button class="btn btn-outline btn-sm" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openRegisterModal()" style="margin-left: 8px;">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                </div>
+                
+                <div id="loggedIn" style="display: none;">
+                    <div class="user-menu">
+                        <button class="user-button" id="userMenuBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="currentUserName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown">
+                            <div class="user-info">
+                                <strong id="dropdownUserName">User</strong>
+                                <small id="dropdownUserEmail">user@email.com</small>
+                                <span class="badge primary" id="dropdownUserRole">Guest</span>
+                            </div>
+                            <hr>
+                            <a href="pages/settings.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <a href="pages/multi-user.html" class="dropdown-item" id="adminLink" style="display:none;">
+                                <i class="fas fa-users-cog"></i> User Management
+                            </a>
+                            <a href="#" class="dropdown-item" id="signOutBtn">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">📊 Quick Stats</h3>
+                <div class="quick-stats" id="quickStats">
+                    <div class="quick-stat">
+                        <i class="fas fa-plug"></i>
+                        <span id="quickApplianceCount">0</span>
+                        <small>Appliances</small>
+                    </div>
+                    <div class="quick-stat">
+                        <i class="fas fa-bolt"></i>
+                        <span id="quickTotalPower">0 W</span>
+                        <small>Total Load</small>
+                    </div>
+                    <div class="quick-stat">
+                        <i class="fas fa-chart-pie"></i>
+                        <span id="quickEfficiency">N/A</span>
+                        <small>Efficiency</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">📁 Saved Projects</h3>
+                <div class="past-projects-list" id="pastProjectsList"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">💡 Smart Tips</h3>
+                <div class="tips-container" id="tipsContainer">
+                    <div class="tip-item">
+                        <i class="fas fa-lightbulb" style="color: #f59e0b;"></i>
+                        <p id="randomTip">Loading tips...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">⚙️ System Status</h3>
+                <div class="system-info">
+                    <div class="info-item">
+                        <span>Voltage:</span>
+                        <strong id="sidebarVoltage">230V</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Frequency:</span>
+                        <strong>50 Hz</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Tariff:</span>
+                        <strong id="sidebarTariff">₦48/kWh</strong>
+                    </div>
+                    <div class="info-item">
+                        <span>Mode:</span>
+                        <strong id="sidebarMode">Online</strong>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1>Electric Load Control Dashboard</h1>
+                    <p>Welcome back, <strong id="welcomeUser">Guest</strong> | 
+                       <span id="currentDateTime"></span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-sm btn-outline" onclick="startTutorial()">
+                        <i class="fas fa-question-circle"></i> Tutorial
+                    </button>
+                    <button class="btn btn-sm btn-outline" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Real-Time Monitor Bar -->
+            <div class="realtime-bar" id="realtimeBar">
+                <div class="realtime-item">
+                    <i class="fas fa-bolt pulse"></i>
+                    <span>Real-Time Power:</span>
+                    <strong id="realTimePower">--</strong>
+                    <small>W</small>
+                </div>
+                <div class="realtime-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Power Factor:</span>
+                    <strong id="powerFactorDisplay">0.85</strong>
+                </div>
+                <div class="realtime-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Hourly Cost:</span>
+                    <strong id="hourlyCost">--</strong>
+                </div>
+                <div class="realtime-item">
+                    <i class="fas fa-temperature-high"></i>
+                    <span>Load Status:</span>
+                    <strong id="loadStatus">Normal</strong>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-header">
+                        <i class="fas fa-bolt"></i>
+                        <span>Total Connected Load</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="totalPower">0.0</span>
+                        <span class="stat-unit">Watts</span>
+                    </div>
+                    <div class="stat-footer">
+                        <small id="powerTrend">--</small>
+                    </div>
+                </div>
+                
+                <div class="stat-card info">
+                    <div class="stat-header">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Total Current Draw</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="totalCurrent">0.00</span>
+                        <span class="stat-unit">Amperes</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <i class="fas fa-clock"></i>
+                        <span>Daily Consumption</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="dailyConsumption">0.00</span>
+                        <span class="stat-unit">kWh</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Est. Monthly Cost</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="monthlyCost">0.00</span>
+                        <span class="stat-unit">NGN</span>
+                    </div>
+                    <div class="stat-footer">
+                        <small id="costTrend">--</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictive Alert -->
+            <div class="predictive-alert" id="predictiveAlert" style="display:none;">
+                <i class="fas fa-robot"></i>
+                <div>
+                    <strong>AI Prediction:</strong>
+                    <span id="predictionMessage"></span>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="viewPredictions()">View Details</button>
+            </div>
+
+            <!-- Add Appliance Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-plus-circle"></i> Add Electrical Appliance</h2>
+                    <button class="btn btn-sm btn-outline" onclick="toggleFormTips()">
+                        <i class="fas fa-info-circle"></i> Tips
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="form-tips" id="formTips" style="display:none;">
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>Pro Tip:</strong> Enter accurate hours per day for precise cost calculations. Most appliances don't run 24/7!
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="applianceName">Appliance Name *</label>
+                            <input type="text" id="applianceName" class="form-control" 
+                                   placeholder="e.g., Air Conditioner" list="applianceSuggestions">
+                            <datalist id="applianceSuggestions">
+                                <option value="Air Conditioner (1HP)">
+                                <option value="Air Conditioner (1.5HP)">
+                                <option value="Air Conditioner (2HP)">
+                                <option value="Refrigerator">
+                                <option value="Freezer">
+                                <option value="Electric Water Heater">
+                                <option value="Washing Machine">
+                                <option value="Electric Cooker">
+                                <option value="Microwave Oven">
+                                <option value="LED Bulb">
+                                <option value="Ceiling Fan">
+                                <option value="Television (LED)">
+                                <option value="Desktop Computer">
+                                <option value="Laptop">
+                                <option value="Phone Charger">
+                                <option value="Electric Iron">
+                                <option value="Pumping Machine">
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity *</label>
+                            <input type="number" id="quantity" class="form-control" value="1" min="1" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="powerRating">Power Rating *</label>
+                            <div class="input-with-hint">
+                                <input type="number" id="powerRating" class="form-control" 
+                                       step="0.01" placeholder="e.g., 1500">
+                                <small class="hint" id="powerHint">Typical: 1000-2000W for AC</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="unitType">Unit Type</label>
+                            <select id="unitType" class="form-control">
+                                <option value="W">Watts (W)</option>
+                                <option value="A">Amperes (A)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hoursPerDay">Hours Used/Day *</label>
+                            <input type="number" id="hoursPerDay" class="form-control" 
+                                   value="8" min="0.5" max="24" step="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="voltage">Voltage (V)</label>
+                            <input type="number" id="voltage" class="form-control" 
+                                   value="230" readonly>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="addBtn">
+                            <i class="fas fa-plus"></i> Add Appliance
+                        </button>
+                        <button class="btn btn-outline" id="addMultipleBtn">
+                            <i class="fas fa-layer-group"></i> Add Multiple
+                        </button>
+                        <button class="btn btn-secondary" id="clearBtn">
+                            <i class="fas fa-eraser"></i> Clear All
+                        </button>
+                        <div class="export-group">
+                            <button class="btn btn-success" id="exportCsvBtn">
+                                <i class="fas fa-file-csv"></i> CSV
+                            </button>
+                            <button class="btn btn-info" id="exportPdfBtn">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button class="btn btn-outline" id="exportJsonBtn">
+                                <i class="fas fa-file-code"></i> JSON
+                            </button>
+                            <button class="btn btn-outline" id="exportExcelBtn">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </button>
+                        </div>
+                        <button class="btn btn-warning" id="saveSessionBtn">
+                            <i class="fas fa-save"></i> Save Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> Connected Load Inventory</h2>
+                    <div>
+                        <span class="badge primary" id="applianceCount">0 appliances</span>
+                        <button class="btn btn-sm btn-outline" onclick="sortTable('name')">
+                            <i class="fas fa-sort"></i> Sort
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="loadTable">
+                        <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Appliance</th>
+                                <th>Qty</th>
+                                <th>Power (W)</th>
+                                <th>Current (A)</th>
+                                <th>Hrs/Day</th>
+                                <th>Total Power (W)</th>
+                                <th>Total Current (A)</th>
+                                <th>Daily (kWh)</th>
+                                <th>Monthly Cost (₦)</th>
+                                <th>% of Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                        <tfoot id="tableFooter"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-shield-alt"></i> System Recommendations</h2>
+                    <button class="btn btn-sm btn-outline" onclick="printRecommendations()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+                <div class="recommendations-grid">
+                    <div class="rec-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Main Breaker Size</h3>
+                        <p id="breakerSize">--</p>
+                    </div>
+                    <div class="rec-card">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>Main Cable Size</h3>
+                        <p id="cableSize">--</p>
+                    </div>
+                    <div class="rec-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Phase Recommendation</h3>
+                        <p id="phaseRecommendation">--</p>
+                    </div>
+                    <div class="rec-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Safety Factor</h3>
+                        <p id="safetyNote">--</p>
+                    </div>
+                    <div class="rec-card">
+                        <i class="fas fa-solar-panel"></i>
+                        <h3>Solar Potential</h3>
+                        <p id="solarRecommendation">--</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="loginModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-sign-in-alt"></i> Sign In</h3>
+                <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" 
+                               placeholder="demo@joshelectric.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-input">
+                            <input type="password" id="loginPassword" class="form-control" 
+                                   placeholder="••••••••" required>
+                            <button type="button" class="toggle-password" data-target="loginPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+                <p class="auth-switch">
+                    Don't have an account? 
+                    <a href="#" onclick="closeLoginModal(); openRegisterModal();">Register</a>
+                </p>
+                <div class="demo-credentials">
+                    <p><strong>Demo Accounts:</strong></p>
+                    <p>Admin: admin@joshelectric.com / admin123</p>
+                    <p>Engineer: engineer@joshelectric.com / eng123</p>
+                    <p>Client: demo@joshelectric.com / demo123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="registerModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Create Account</h3>
+                <button class="modal-close" onclick="closeRegisterModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="regFirstName" class="form-control" 
+                                   placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="regLastName" class="form-control" 
+                                   placeholder="Doe" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="regEmail" class="form-control" 
+                               placeholder="engineer@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password (min. 6 characters)</label>
+                        <input type="password" id="regPassword" class="form-control" 
+                               placeholder="••••••••" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="regRole" class="form-control">
+                            <option value="client">Client</option>
+                            <option value="engineer">Engineer</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+                <p class="auth-switch">
+                    Already have an account? 
+                    <a href="#" onclick="closeRegisterModal(); openLoginModal();">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay" style="display:none;">
+        <div class="tutorial-card">
+            <h3 id="tutorialTitle">Welcome to JoshElectric Control</h3>
+            <p id="tutorialContent">Let's get started with your first load calculation!</p>
+            <div class="tutorial-actions">
+                <button class="btn btn-secondary" id="tutorialSkip">Skip</button>
+                <button class="btn btn-primary" id="tutorialNext">Next</button>
+            </div>
+            <div class="tutorial-dots" id="tutorialDots"></div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="js/config.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/predictor.js"></script>
+    <script src="js/dark-mode.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

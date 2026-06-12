@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & Predictions | JoshElectric Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <div class="brand-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <span>JoshElectric<span class="brand-highlight"> Control</span></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="load-modelling.html" class="nav-link"><i class="fas fa-plug"></i> Load Modelling</a>
+            <a href="analytics.html" class="nav-link active"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="comparative-analysis.html" class="nav-link"><i class="fas fa-balance-scale"></i> Compare</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="icon-button" onclick="darkMode.toggle()" title="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <main class="main-content" style="max-width: 1300px; margin: 0 auto;">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-bar"></i> Analytics & Predictive Analysis</h1>
+                <p>Comprehensive load analysis, consumption patterns, and AI-powered predictions</p>
+            </div>
+
+            <!-- Prediction Summary Cards -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-header">
+                        <i class="fas fa-robot"></i>
+                        <span>Predicted Next Month</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="predictedKWh">--</span>
+                        <span class="stat-unit">kWh</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Predicted Cost</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="predictedCost">--</span>
+                        <span class="stat-unit">NGN</span>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-header">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Consumption Trend</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="consumptionTrend">--</span>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Confidence Level</span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-value" id="confidenceLevel">--</span>
+                        <span class="stat-unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 24px;">
+                <!-- Load Distribution -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-pie"></i> Load Distribution by Category</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="loadDistributionChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Consumption Trend -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Monthly Consumption Trend</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="consumptionTrendChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Hourly Load Profile -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> Daily Load Profile (Predicted)</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="hourlyProfileChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Cost Analysis -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Cost Comparison by Appliance</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="costComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Recommendations -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h2><i class="fas fa-lightbulb"></i> AI-Powered Recommendations</h2>
+                </div>
+                <div class="card-body">
+                    <div id="smartRecommendations">
+                        <div class="alert alert-info">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Analyzing your load patterns...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Potential -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h2><i class="fas fa-piggy-bank"></i> Potential Savings Analysis</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Improvement Area</th>
+                                    <th>Monthly Savings</th>
+                                    <th>Annual Savings</th>
+                                    <th>Implementation Cost</th>
+                                    <th>Payback Period</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="savingsTableBody">
+                                <tr><td colspan="6" class="text-center">Loading savings analysis...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> System Performance Metrics</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Current Value</th>
+                                <th>Ideal Range</th>
+                                <th>Status</th>
+                                <th>Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Power Factor</td>
+                                <td id="metricPowerFactor">0.85</td>
+                                <td>0.90 - 1.00</td>
+                                <td><span class="badge warning" id="pfStatus">Fair</span></td>
+                                <td id="pfRecommendation">Consider capacitor bank installation</td>
+                            </tr>
+                            <tr>
+                                <td>Load Factor</td>
+                                <td id="metricLoadFactor">--</td>
+                                <td>0.60 - 0.80</td>
+                                <td><span class="badge success" id="lfStatus">Good</span></td>
+                                <td>Load distribution is efficient</td>
+                            </tr>
+                            <tr>
+                                <td>Demand Factor</td>
+                                <td id="metricDemandFactor">--</td>
+                                <td>0.70 - 0.90</td>
+                                <td><span class="badge info" id="dfStatus">Normal</span></td>
+                                <td>Monitor during peak hours</td>
+                            </tr>
+                            <tr>
+                                <td>Energy Efficiency Ratio</td>
+                                <td id="metricEER">--</td>
+                                <td>> 3.0</td>
+                                <td><span class="badge success" id="eerStatus">Good</span></td>
+                                <td>System operating efficiently</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/predictor.js"></script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/analytics.js"></script>
+</body>
+</html>

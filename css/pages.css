@@ -1,0 +1,217 @@
+/* ============================================
+   JOSH ELECTRIC CONTROL - PAGE SPECIFIC STYLES
+   ============================================ */
+
+/* Load Modelling Page */
+.modelling-section {
+    margin-bottom: 24px;
+}
+
+.calculation-result {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.calculation-result h4 {
+    color: #1e3a8a;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.result-item {
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #3b82f6;
+}
+
+.result-item label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.result-item .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Analytics Page */
+.chart-container {
+    position: relative;
+    height: 300px;
+    padding: 20px;
+}
+
+.chart-container canvas {
+    max-height: 280px;
+}
+
+.metrics-table {
+    margin-top: 20px;
+}
+
+.metric-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.metric-indicator.good { background: #10b981; }
+.metric-indicator.warning { background: #f59e0b; }
+.metric-indicator.danger { background: #ef4444; }
+
+/* History Page */
+.history-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-filters .form-control {
+    max-width: 200px;
+}
+
+.session-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.session-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.session-title {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.session-date {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.session-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.session-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.session-stat .label {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.session-stat .value {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Reports Page */
+.report-template {
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.report-template:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.report-template i {
+    font-size: 2rem;
+    color: #3b82f6;
+    margin-bottom: 12px;
+}
+
+.report-template h4 {
+    margin-bottom: 8px;
+}
+
+.report-template p {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* Settings Page */
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Print Styles */
+@media print {
+    .top-navbar,
+    .sidebar,
+    .nav-actions,
+    .form-actions,
+    .btn,
+    .notification-container,
+    .realtime-bar,
+    .predictive-alert,
+    .tutorial-overlay,
+    .modal-overlay {
+        display: none !important;
+    }
+    
+    .main-container {
+        display: block;
+    }
+    
+    .main-content {
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        break-inside: avoid;
+    }
+    
+    body {
+        background: white;
+    }
+}

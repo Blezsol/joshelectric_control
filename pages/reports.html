@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | JoshElectric Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <div class="brand-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <span>JoshElectric<span class="brand-highlight"> Control</span></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="load-modelling.html" class="nav-link"><i class="fas fa-plug"></i> Load Modelling</a>
+            <a href="analytics.html" class="nav-link"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="reports.html" class="nav-link active"><i class="fas fa-file-pdf"></i> Reports</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <main class="main-content" style="max-width: 900px; margin: 0 auto;">
+            <div class="page-header">
+                <h1><i class="fas fa-file-alt"></i> Report Generator</h1>
+                <p>Generate professional electrical load reports in multiple formats</p>
+            </div>
+
+            <!-- Report Templates -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                <div class="report-template" onclick="generateReport('summary')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h4>Load Summary Report</h4>
+                    <p>Complete load inventory with calculations and costs</p>
+                    <span class="badge info">PDF</span>
+                </div>
+                <div class="report-template" onclick="generateReport('audit')">
+                    <i class="fas fa-search-dollar"></i>
+                    <h4>Energy Audit Report</h4>
+                    <p>Detailed cost analysis and consumption patterns</p>
+                    <span class="badge info">PDF</span>
+                </div>
+                <div class="report-template" onclick="generateReport('compliance')">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Compliance Certificate</h4>
+                    <p>System compliance and safety documentation</p>
+                    <span class="badge info">PDF</span>
+                </div>
+                <div class="report-template" onclick="generateReport('recommendations')">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Recommendations Report</h4>
+                    <p>Smart suggestions for energy optimization</p>
+                    <span class="badge info">PDF</span>
+                </div>
+            </div>
+
+            <!-- Quick Export -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-download"></i> Quick Export Options</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button class="btn btn-success btn-lg" onclick="quickExportCSV()">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn btn-primary btn-lg" onclick="quickExportPDF()">
+                            <i class="fas fa-file-pdf"></i> Export PDF Report
+                        </button>
+                        <button class="btn btn-info btn-lg" onclick="quickExportJSON()">
+                            <i class="fas fa-file-code"></i> Export JSON Data
+                        </button>
+                        <button class="btn btn-warning btn-lg" onclick="quickExportExcel()">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="card" id="reportPreview" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-eye"></i> Report Preview</h2>
+                    <button class="btn btn-sm btn-outline" onclick="printReport()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+                <div class="card-body" id="previewContent"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/reports.js"></script>
+</body>
+</html>

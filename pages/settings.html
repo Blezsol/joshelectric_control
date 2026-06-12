@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | JoshElectric Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <div class="brand-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <span>JoshElectric<span class="brand-highlight"> Control</span></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="load-modelling.html" class="nav-link"><i class="fas fa-plug"></i> Load Modelling</a>
+            <a href="analytics.html" class="nav-link"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="settings.html" class="nav-link active"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <main class="main-content" style="max-width: 800px; margin: 0 auto;">
+            <div class="page-header">
+                <h1><i class="fas fa-cog"></i> System Settings</h1>
+                <p>Configure your JoshElectric Control preferences</p>
+            </div>
+
+            <!-- Electrical Standards -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-bolt"></i> Electrical Standards</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Standard Voltage (V)</label>
+                            <input type="number" id="settingsVoltage" class="form-control" value="230">
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency (Hz)</label>
+                            <select id="settingsFrequency" class="form-control">
+                                <option value="50">50 Hz</option>
+                                <option value="60">60 Hz</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Safety Margin (%)</label>
+                            <input type="number" id="settingsSafetyMargin" class="form-control" value="25" min="10" max="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tariff Configuration -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-money-bill-wave"></i> Tariff Configuration</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select id="settingsCurrency" class="form-control">
+                                <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                                <option value="USD">USD ($) - US Dollar</option>
+                                <option value="EUR">EUR (€) - Euro</option>
+                                <option value="GBP">GBP (£) - British Pound</option>
+                                <option value="GHS">GHS (₵) - Ghanaian Cedi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Cost per kWh</label>
+                            <input type="number" id="settingsTariff" class="form-control" value="48" step="0.01">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-desktop"></i> Display Settings</h2>
+                </div>
+                <div class="card-body">
+                    <div class="settings-toggle">
+                        <span>Dark Mode</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-toggle">
+                        <span>Auto-save Sessions</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoSaveToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-toggle">
+                        <span>Show Notifications</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notificationsToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-database"></i> Data Management</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="exportAllData()">
+                            <i class="fas fa-download"></i> Export All Data
+                        </button>
+                        <button class="btn btn-secondary" onclick="importData()">
+                            <i class="fas fa-upload"></i> Import Data
+                        </button>
+                        <button class="btn btn-danger" onclick="resetAllData()">
+                            <i class="fas fa-trash-alt"></i> Reset All Data
+                        </button>
+                    </div>
+                    <input type="file" id="importFileInput" style="display:none;" accept=".json" onchange="handleFileImport(event)">
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" onclick="saveAllSettings()">
+                    <i class="fas fa-save"></i> Save All Settings
+                </button>
+            </div>
+
+            <!-- About -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h2><i class="fas fa-info-circle"></i> About JoshElectric Control</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Version:</strong> 3.0.0</p>
+                    <p><strong>Build Date:</strong> June 2025</p>
+                    <p><strong>Description:</strong> Professional Electric Load Management System for Nigerian Homes and Businesses</p>
+                    <p style="color: #64748b; font-size: 0.85rem;">© 2025 JoshElectric Ltd. All rights reserved.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/settings.js"></script>
+</body>
+</html>

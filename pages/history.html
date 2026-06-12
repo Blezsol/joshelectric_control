@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session History | JoshElectric Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <div class="brand-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <span>JoshElectric<span class="brand-highlight"> Control</span></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="load-modelling.html" class="nav-link"><i class="fas fa-plug"></i> Load Modelling</a>
+            <a href="analytics.html" class="nav-link"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="history.html" class="nav-link active"><i class="fas fa-history"></i> History</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <main class="main-content" style="max-width: 1000px; margin: 0 auto;">
+            <div class="page-header">
+                <h1><i class="fas fa-history"></i> Session History</h1>
+                <p>Previously saved load configurations and project sessions</p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="history-filters">
+                        <input type="text" id="searchHistory" class="form-control" placeholder="Search by name...">
+                        <select id="sortHistory" class="form-control">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="name-asc">Name A-Z</option>
+                            <option value="cost-desc">Highest Cost</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="filterSessions()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-outline" onclick="exportAllSessions()">
+                            <i class="fas fa-download"></i> Export All
+                        </button>
+                        <button class="btn btn-danger" onclick="clearAllSessions()">
+                            <i class="fas fa-trash-alt"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessions List -->
+            <div id="sessionsList"></div>
+
+            <!-- Empty State -->
+            <div id="emptyHistory" class="empty-state" style="display:none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>No Saved Sessions</h3>
+                <p>Save your load configurations from the dashboard to see them here.</p>
+                <a href="../index.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Go to Dashboard
+                </a>
+            </div>
+
+            <!-- Session Detail Modal -->
+            <div class="modal-overlay" id="sessionDetailModal" style="display:none;">
+                <div class="modal" style="max-width: 700px;">
+                    <div class="modal-header">
+                        <h3 id="sessionDetailTitle">Session Details</h3>
+                        <button class="modal-close" onclick="closeSessionDetail()">&times;</button>
+                    </div>
+                    <div class="modal-body" id="sessionDetailContent"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/history.js"></script>
+</body>
+</html>

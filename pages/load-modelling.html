@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Modelling | JoshElectric Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/dark-mode.css" id="theme-style" disabled>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="nav-brand">
+            <a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <div class="brand-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40">
+                    <rect width="40" height="40" rx="10" fill="#1e3a8a"/>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
+                </svg>
+                <span>JoshElectric<span class="brand-highlight"> Control</span></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="load-modelling.html" class="nav-link active"><i class="fas fa-plug"></i> Load Modelling</a>
+            <a href="analytics.html" class="nav-link"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="comparative-analysis.html" class="nav-link"><i class="fas fa-balance-scale"></i> Compare</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <main class="main-content" style="max-width: 1000px; margin: 0 auto;">
+            <div class="page-header">
+                <h1><i class="fas fa-microchip"></i> Load Modelling Tools</h1>
+                <p>Advanced electrical load analysis, calculations, and system design tools</p>
+            </div>
+
+            <!-- Single Load Analysis -->
+            <div class="card modelling-section">
+                <div class="card-header">
+                    <h2><i class="fas fa-calculator"></i> Single Load Analysis</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Load Type</label>
+                            <select id="loadType" class="form-control">
+                                <option value="resistive">Resistive (Heating/Lighting)</option>
+                                <option value="inductive">Inductive (Motor/Compressor)</option>
+                                <option value="capacitive">Capacitive</option>
+                                <option value="electronic">Electronic (Non-linear)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Rated Power (W)</label>
+                            <input type="number" id="ratedPower" class="form-control" value="1500">
+                        </div>
+                        <div class="form-group">
+                            <label>Power Factor (0.1 - 1.0)</label>
+                            <input type="number" id="powerFactor" class="form-control" value="0.85" step="0.01" min="0.1" max="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Efficiency (%)</label>
+                            <input type="number" id="efficiency" class="form-control" value="90" min="50" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Operating Hours/Day</label>
+                            <input type="number" id="operatingHours" class="form-control" value="8" min="1" max="24">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="analyzeSingleLoad()" style="margin-top: 16px;">
+                        <i class="fas fa-play"></i> Analyze Load
+                    </button>
+                    
+                    <div id="singleLoadResults" class="calculation-result" style="display:none;">
+                        <h4><i class="fas fa-chart-bar"></i> Analysis Results</h4>
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <label>Apparent Power</label>
+                                <span class="value" id="apparentPower">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Reactive Power</label>
+                                <span class="value" id="reactivePower">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Actual Current</label>
+                                <span class="value" id="actualCurrent">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Input Power Required</label>
+                                <span class="value" id="inputPower">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Daily Energy</label>
+                                <span class="value" id="dailyEnergy">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Monthly Cost</label>
+                                <span class="value" id="loadMonthlyCost">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diversity Factor Calculator -->
+            <div class="card modelling-section">
+                <div class="card-header">
+                    <h2><i class="fas fa-layer-group"></i> Diversity Factor Calculator</h2>
+                </div>
+                <div class="card-body">
+                    <p style="color: #64748b; margin-bottom: 16px;">
+                        Diversity factor helps determine the actual maximum demand relative to the sum of individual maximum demands.
+                    </p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Sum of Individual Max Demands (kW)</label>
+                            <input type="number" id="sumMaxDemand" class="form-control" value="50">
+                        </div>
+                        <div class="form-group">
+                            <label>System Maximum Demand (kW)</label>
+                            <input type="number" id="systemMaxDemand" class="form-control" value="35">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateDiversity()" style="margin-top: 16px;">
+                        <i class="fas fa-calculator"></i> Calculate Diversity
+                    </button>
+                    
+                    <div id="diversityResult" class="calculation-result" style="display:none;">
+                        <h4>Diversity Factor Result</h4>
+                        <p style="font-size: 1.2rem;">Diversity Factor: <strong id="diversityFactorValue">--</strong></p>
+                        <p id="diversityInterpretation" style="color: #64748b;"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voltage Drop Calculator -->
+            <div class="card modelling-section">
+                <div class="card-header">
+                    <h2><i class="fas fa-arrow-down"></i> Voltage Drop Calculator</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Current (A)</label>
+                            <input type="number" id="vdCurrent" class="form-control" value="20">
+                        </div>
+                        <div class="form-group">
+                            <label>Cable Length (meters)</label>
+                            <input type="number" id="vdLength" class="form-control" value="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Cable Size (mm²)</label>
+                            <select id="vdCableSize" class="form-control">
+                                <option value="1.5">1.5mm²</option>
+                                <option value="2.5" selected>2.5mm²</option>
+                                <option value="4">4mm²</option>
+                                <option value="6">6mm²</option>
+                                <option value="10">10mm²</option>
+                                <option value="16">16mm²</option>
+                                <option value="25">25mm²</option>
+                                <option value="35">35mm²</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>System Voltage (V)</label>
+                            <input type="number" id="vdVoltage" class="form-control" value="230" readonly>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateVoltageDrop()" style="margin-top: 16px;">
+                        <i class="fas fa-calculator"></i> Calculate Voltage Drop
+                    </button>
+                    
+                    <div id="voltageDropResult" class="calculation-result" style="display:none;">
+                        <h4>Voltage Drop Analysis</h4>
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <label>Voltage Drop</label>
+                                <span class="value" id="voltageDropValue">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Percentage Drop</label>
+                                <span class="value" id="voltageDropPercent">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>End Voltage</label>
+                                <span class="value" id="endVoltage">--</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Status</label>
+                                <span class="value" id="voltageDropStatus">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cable Sizing Reference -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-book"></i> Cable Sizing Reference (IEC Standard)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cable Size</th>
+                                <th>Max Current</th>
+                                <th>Recommended Breaker</th>
+                                <th>Typical Application</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cableSizingTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/dark-mode.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/load-modelling.js"></script>
+</body>
+</html>
