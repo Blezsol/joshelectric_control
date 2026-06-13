@@ -7,7 +7,11 @@
     <meta name="theme-color" content="#1e3a8a">
     <link rel="manifest" href="manifest.json">
     <title>JoshElectric Control | Electric Load Management System</title>
+    
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages.css">
@@ -21,7 +25,7 @@
             <div class="loading-logo">
                 <svg width="60" height="60" viewBox="0 0 60 60">
                     <rect width="60" height="60" rx="15" fill="#1e3a8a"/>
-                    <text x="30" y="42" text-anchor="middle" fill="white" font-size="32" font-weight="900">J</text>
+                    <text x="30" y="42" text-anchor="middle" fill="white" font-size="32" font-weight="900" font-family="Arial, sans-serif">J</text>
                     <circle cx="48" cy="12" r="6" fill="#f59e0b"/>
                 </svg>
             </div>
@@ -33,7 +37,7 @@
     <!-- Top Navigation Bar -->
     <header class="top-navbar">
         <div class="nav-brand">
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
             
@@ -46,7 +50,7 @@
                             <stop offset="100%" stop-color="#3b82f6"/>
                         </linearGradient>
                     </defs>
-                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900">J</text>
+                    <text x="20" y="28" text-anchor="middle" fill="white" font-size="22" font-weight="900" font-family="Arial, sans-serif">J</text>
                     <circle cx="32" cy="8" r="4" fill="#f59e0b"/>
                 </svg>
                 <div class="logo-text">
@@ -62,7 +66,7 @@
             </a>
             
             <div class="nav-dropdown">
-                <button class="nav-link dropdown-toggle">
+                <button class="nav-link dropdown-toggle" type="button">
                     <i class="fas fa-plug"></i> Load Management
                     <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </button>
@@ -83,7 +87,7 @@
             </div>
             
             <div class="nav-dropdown">
-                <button class="nav-link dropdown-toggle">
+                <button class="nav-link dropdown-toggle" type="button">
                     <i class="fas fa-users"></i> Users
                     <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </button>
@@ -103,33 +107,34 @@
         </nav>
         
         <div class="nav-actions">
-            <button class="icon-button" id="darkModeToggle" title="Toggle Dark Mode" aria-label="Dark mode toggle">
+            <button class="icon-button" id="darkModeToggle" type="button" title="Toggle Dark Mode" aria-label="Dark mode toggle">
                 <i class="fas fa-moon"></i>
             </button>
             
-            <button class="icon-button" id="notificationBtn" title="Notifications" aria-label="Notifications">
+            <button class="icon-button" id="notificationBtn" type="button" title="Notifications" aria-label="Notifications">
                 <i class="fas fa-bell"></i>
                 <span class="badge" id="notificationBadge">0</span>
             </button>
             
+            <!-- Auth Area - NO inline onclick handlers -->
             <div id="authArea">
-                <div id="notLoggedIn">
-                    <button class="btn btn-outline btn-sm" onclick="openLoginModal()">
+                <div id="notLoggedIn" style="display: flex; gap: 8px; align-items: center;">
+                    <button class="btn btn-outline btn-sm" id="signInBtn" type="button">
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
-                    <button class="btn btn-primary btn-sm" onclick="openRegisterModal()" style="margin-left: 8px;">
+                    <button class="btn btn-primary btn-sm" id="registerBtn" type="button">
                         <i class="fas fa-user-plus"></i> Register
                     </button>
                 </div>
                 
                 <div id="loggedIn" style="display: none;">
                     <div class="user-menu">
-                        <button class="user-button" id="userMenuBtn">
+                        <button class="user-button" id="userMenuBtn" type="button">
                             <i class="fas fa-user-circle"></i>
                             <span id="currentUserName">User</span>
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        <div class="user-dropdown">
+                        <div class="user-dropdown" id="userDropdown">
                             <div class="user-info">
                                 <strong id="dropdownUserName">User</strong>
                                 <small id="dropdownUserEmail">user@email.com</small>
@@ -179,12 +184,14 @@
             
             <div class="sidebar-section">
                 <h3 class="sidebar-title">📁 Saved Projects</h3>
-                <div class="past-projects-list" id="pastProjectsList"></div>
+                <div class="past-projects-list" id="pastProjectsList">
+                    <p style="color:#64748b;font-size:0.85rem;">No saved projects yet.</p>
+                </div>
             </div>
             
             <div class="sidebar-section">
                 <h3 class="sidebar-title">💡 Smart Tips</h3>
-                <div class="tips-container" id="tipsContainer">
+                <div class="tips-container">
                     <div class="tip-item">
                         <i class="fas fa-lightbulb" style="color: #f59e0b;"></i>
                         <p id="randomTip">Loading tips...</p>
@@ -220,15 +227,13 @@
             <div class="page-header">
                 <div>
                     <h1>Electric Load Control Dashboard</h1>
-                    <p>Welcome back, <strong id="welcomeUser">Guest</strong> | 
-                       <span id="currentDateTime"></span>
-                    </p>
+                    <p>Welcome, <strong id="welcomeUser">Guest</strong> | <span id="currentDateTime"></span></p>
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-sm btn-outline" onclick="startTutorial()">
+                    <button class="btn btn-sm btn-outline" id="tutorialBtn" type="button">
                         <i class="fas fa-question-circle"></i> Tutorial
                     </button>
-                    <button class="btn btn-sm btn-outline" id="refreshBtn">
+                    <button class="btn btn-sm btn-outline" id="refreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
@@ -274,7 +279,6 @@
                         <small id="powerTrend">--</small>
                     </div>
                 </div>
-                
                 <div class="stat-card info">
                     <div class="stat-header">
                         <i class="fas fa-exchange-alt"></i>
@@ -285,7 +289,6 @@
                         <span class="stat-unit">Amperes</span>
                     </div>
                 </div>
-                
                 <div class="stat-card success">
                     <div class="stat-header">
                         <i class="fas fa-clock"></i>
@@ -296,7 +299,6 @@
                         <span class="stat-unit">kWh</span>
                     </div>
                 </div>
-                
                 <div class="stat-card warning">
                     <div class="stat-header">
                         <i class="fas fa-money-bill-wave"></i>
@@ -319,14 +321,14 @@
                     <strong>AI Prediction:</strong>
                     <span id="predictionMessage"></span>
                 </div>
-                <button class="btn btn-sm btn-outline" onclick="viewPredictions()">View Details</button>
+                <button class="btn btn-sm btn-outline" id="viewPredictionsBtn" type="button">View Details</button>
             </div>
 
             <!-- Add Appliance Form -->
             <div class="card">
                 <div class="card-header">
                     <h2><i class="fas fa-plus-circle"></i> Add Electrical Appliance</h2>
-                    <button class="btn btn-sm btn-outline" onclick="toggleFormTips()">
+                    <button class="btn btn-sm btn-outline" id="toggleFormTipsBtn" type="button">
                         <i class="fas fa-info-circle"></i> Tips
                     </button>
                 </div>
@@ -340,8 +342,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="applianceName">Appliance Name *</label>
-                            <input type="text" id="applianceName" class="form-control" 
-                                   placeholder="e.g., Air Conditioner" list="applianceSuggestions">
+                            <input type="text" id="applianceName" class="form-control" placeholder="e.g., Air Conditioner" list="applianceSuggestions">
                             <datalist id="applianceSuggestions">
                                 <option value="Air Conditioner (1HP)">
                                 <option value="Air Conditioner (1.5HP)">
@@ -369,8 +370,7 @@
                         <div class="form-group">
                             <label for="powerRating">Power Rating *</label>
                             <div class="input-with-hint">
-                                <input type="number" id="powerRating" class="form-control" 
-                                       step="0.01" placeholder="e.g., 1500">
+                                <input type="number" id="powerRating" class="form-control" step="0.01" placeholder="e.g., 1500">
                                 <small class="hint" id="powerHint">Typical: 1000-2000W for AC</small>
                             </div>
                         </div>
@@ -383,40 +383,38 @@
                         </div>
                         <div class="form-group">
                             <label for="hoursPerDay">Hours Used/Day *</label>
-                            <input type="number" id="hoursPerDay" class="form-control" 
-                                   value="8" min="0.5" max="24" step="0.5">
+                            <input type="number" id="hoursPerDay" class="form-control" value="8" min="0.5" max="24" step="0.5">
                         </div>
                         <div class="form-group">
                             <label for="voltage">Voltage (V)</label>
-                            <input type="number" id="voltage" class="form-control" 
-                                   value="230" readonly>
+                            <input type="number" id="voltage" class="form-control" value="230" readonly>
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button class="btn btn-primary" id="addBtn">
+                        <button class="btn btn-primary" id="addBtn" type="button">
                             <i class="fas fa-plus"></i> Add Appliance
                         </button>
-                        <button class="btn btn-outline" id="addMultipleBtn">
+                        <button class="btn btn-outline" id="addMultipleBtn" type="button">
                             <i class="fas fa-layer-group"></i> Add Multiple
                         </button>
-                        <button class="btn btn-secondary" id="clearBtn">
+                        <button class="btn btn-secondary" id="clearBtn" type="button">
                             <i class="fas fa-eraser"></i> Clear All
                         </button>
                         <div class="export-group">
-                            <button class="btn btn-success" id="exportCsvBtn">
+                            <button class="btn btn-success" id="exportCsvBtn" type="button">
                                 <i class="fas fa-file-csv"></i> CSV
                             </button>
-                            <button class="btn btn-info" id="exportPdfBtn">
+                            <button class="btn btn-info" id="exportPdfBtn" type="button">
                                 <i class="fas fa-file-pdf"></i> PDF
                             </button>
-                            <button class="btn btn-outline" id="exportJsonBtn">
+                            <button class="btn btn-outline" id="exportJsonBtn" type="button">
                                 <i class="fas fa-file-code"></i> JSON
                             </button>
-                            <button class="btn btn-outline" id="exportExcelBtn">
+                            <button class="btn btn-outline" id="exportExcelBtn" type="button">
                                 <i class="fas fa-file-excel"></i> Excel
                             </button>
                         </div>
-                        <button class="btn btn-warning" id="saveSessionBtn">
+                        <button class="btn btn-warning" id="saveSessionBtn" type="button">
                             <i class="fas fa-save"></i> Save Session
                         </button>
                     </div>
@@ -429,7 +427,7 @@
                     <h2><i class="fas fa-table"></i> Connected Load Inventory</h2>
                     <div>
                         <span class="badge primary" id="applianceCount">0 appliances</span>
-                        <button class="btn btn-sm btn-outline" onclick="sortTable('name')">
+                        <button class="btn btn-sm btn-outline" id="sortTableBtn" type="button">
                             <i class="fas fa-sort"></i> Sort
                         </button>
                     </div>
@@ -462,7 +460,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2><i class="fas fa-shield-alt"></i> System Recommendations</h2>
-                    <button class="btn btn-sm btn-outline" onclick="printRecommendations()">
+                    <button class="btn btn-sm btn-outline" id="printRecBtn" type="button">
                         <i class="fas fa-print"></i> Print
                     </button>
                 </div>
@@ -497,25 +495,23 @@
         </main>
     </div>
 
-    <!-- Modals -->
+    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal" style="display: none;">
         <div class="modal">
             <div class="modal-header">
                 <h3><i class="fas fa-sign-in-alt"></i> Sign In</h3>
-                <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+                <button class="modal-close" id="closeLoginModalBtn" type="button">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="loginForm">
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="loginEmail" class="form-control" 
-                               placeholder="demo@joshelectric.com" required>
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="demo@joshelectric.com" required>
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
+                        <label for="loginPassword">Password</label>
                         <div class="password-input">
-                            <input type="password" id="loginPassword" class="form-control" 
-                                   placeholder="••••••••" required>
+                            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
                             <button type="button" class="toggle-password" data-target="loginPassword">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -533,7 +529,7 @@
                 </form>
                 <p class="auth-switch">
                     Don't have an account? 
-                    <a href="#" onclick="closeLoginModal(); openRegisterModal();">Register</a>
+                    <a href="#" id="switchToRegister">Register here</a>
                 </p>
                 <div class="demo-credentials">
                     <p><strong>Demo Accounts:</strong></p>
@@ -545,38 +541,40 @@
         </div>
     </div>
 
+    <!-- Register Modal -->
     <div class="modal-overlay" id="registerModal" style="display: none;">
         <div class="modal">
             <div class="modal-header">
                 <h3><i class="fas fa-user-plus"></i> Create Account</h3>
-                <button class="modal-close" onclick="closeRegisterModal()">&times;</button>
+                <button class="modal-close" id="closeRegisterModalBtn" type="button">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="registerForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" id="regFirstName" class="form-control" 
-                                   placeholder="John" required>
+                            <label for="regFirstName">First Name</label>
+                            <input type="text" id="regFirstName" class="form-control" placeholder="John" required>
                         </div>
                         <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" id="regLastName" class="form-control" 
-                                   placeholder="Doe" required>
+                            <label for="regLastName">Last Name</label>
+                            <input type="text" id="regLastName" class="form-control" placeholder="Doe" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="regEmail" class="form-control" 
-                               placeholder="engineer@example.com" required>
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="engineer@example.com" required>
                     </div>
                     <div class="form-group">
-                        <label>Password (min. 6 characters)</label>
-                        <input type="password" id="regPassword" class="form-control" 
-                               placeholder="••••••••" required minlength="6">
+                        <label for="regPassword">Password (min. 6 characters)</label>
+                        <div class="password-input">
+                            <input type="password" id="regPassword" class="form-control" placeholder="••••••••" required minlength="6">
+                            <button type="button" class="toggle-password" data-target="regPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Role</label>
+                        <label for="regRole">Role</label>
                         <select id="regRole" class="form-control">
                             <option value="client">Client</option>
                             <option value="engineer">Engineer</option>
@@ -589,32 +587,20 @@
                 </form>
                 <p class="auth-switch">
                     Already have an account? 
-                    <a href="#" onclick="closeRegisterModal(); openLoginModal();">Sign in</a>
+                    <a href="#" id="switchToLogin">Sign in</a>
                 </p>
             </div>
-        </div>
-    </div>
-
-    <!-- Tutorial Overlay -->
-    <div class="tutorial-overlay" id="tutorialOverlay" style="display:none;">
-        <div class="tutorial-card">
-            <h3 id="tutorialTitle">Welcome to JoshElectric Control</h3>
-            <p id="tutorialContent">Let's get started with your first load calculation!</p>
-            <div class="tutorial-actions">
-                <button class="btn btn-secondary" id="tutorialSkip">Skip</button>
-                <button class="btn btn-primary" id="tutorialNext">Next</button>
-            </div>
-            <div class="tutorial-dots" id="tutorialDots"></div>
         </div>
     </div>
 
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
 
-    <!-- Scripts -->
+    <!-- PDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     
+    <!-- Application Scripts -->
     <script src="js/config.js"></script>
     <script src="js/database.js"></script>
     <script src="js/auth.js"></script>
@@ -623,13 +609,158 @@
     <script src="js/navigation.js"></script>
     <script src="js/dashboard.js"></script>
 
+    <!-- Event Listener Bindings (No inline onclick - CSP safe) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== Binding Event Listeners ===');
+            
+            // Sign In button
+            const signInBtn = document.getElementById('signInBtn');
+            if (signInBtn) {
+                signInBtn.addEventListener('click', function() {
+                    document.getElementById('loginModal').style.display = 'flex';
+                });
+                console.log('✅ Sign In button bound');
+            }
+            
+            // Register button
+            const registerBtn = document.getElementById('registerBtn');
+            if (registerBtn) {
+                registerBtn.addEventListener('click', function() {
+                    document.getElementById('registerModal').style.display = 'flex';
+                });
+                console.log('✅ Register button bound');
+            }
+            
+            // Close login modal
+            const closeLoginBtn = document.getElementById('closeLoginModalBtn');
+            if (closeLoginBtn) {
+                closeLoginBtn.addEventListener('click', function() {
+                    document.getElementById('loginModal').style.display = 'none';
+                });
+            }
+            
+            // Close register modal
+            const closeRegisterBtn = document.getElementById('closeRegisterModalBtn');
+            if (closeRegisterBtn) {
+                closeRegisterBtn.addEventListener('click', function() {
+                    document.getElementById('registerModal').style.display = 'none';
+                });
+            }
+            
+            // Switch between modals
+            const switchToRegister = document.getElementById('switchToRegister');
+            if (switchToRegister) {
+                switchToRegister.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('loginModal').style.display = 'none';
+                    document.getElementById('registerModal').style.display = 'flex';
+                });
+            }
+            
+            const switchToLogin = document.getElementById('switchToLogin');
+            if (switchToLogin) {
+                switchToLogin.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('registerModal').style.display = 'none';
+                    document.getElementById('loginModal').style.display = 'flex';
+                });
+            }
+            
+            // Dark mode toggle
+            const darkModeBtn = document.getElementById('darkModeToggle');
+            if (darkModeBtn && typeof darkMode !== 'undefined') {
+                darkModeBtn.addEventListener('click', function() {
+                    darkMode.toggle();
+                });
+            }
+            
+            // Tutorial button
+            const tutorialBtn = document.getElementById('tutorialBtn');
+            if (tutorialBtn) {
+                tutorialBtn.addEventListener('click', function() {
+                    if (typeof startTutorial === 'function') {
+                        startTutorial();
+                    }
+                });
+            }
+            
+            // Refresh button
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn && typeof dashboard !== 'undefined') {
+                refreshBtn.addEventListener('click', function() {
+                    dashboard.renderAll();
+                    dashboard.updateQuickStats();
+                    dashboard.loadRandomTip();
+                });
+            }
+            
+            // View predictions button
+            const viewPredictionsBtn = document.getElementById('viewPredictionsBtn');
+            if (viewPredictionsBtn) {
+                viewPredictionsBtn.addEventListener('click', function() {
+                    window.location.href = 'pages/analytics.html';
+                });
+            }
+            
+            // Toggle form tips
+            const toggleFormTipsBtn = document.getElementById('toggleFormTipsBtn');
+            if (toggleFormTipsBtn) {
+                toggleFormTipsBtn.addEventListener('click', function() {
+                    const tips = document.getElementById('formTips');
+                    if (tips) {
+                        tips.style.display = tips.style.display === 'none' ? 'block' : 'none';
+                    }
+                });
+            }
+            
+            // Print recommendations
+            const printRecBtn = document.getElementById('printRecBtn');
+            if (printRecBtn) {
+                printRecBtn.addEventListener('click', function() {
+                    window.print();
+                });
+            }
+            
+            // Sort table
+            const sortTableBtn = document.getElementById('sortTableBtn');
+            if (sortTableBtn && typeof dashboard !== 'undefined') {
+                sortTableBtn.addEventListener('click', function() {
+                    dashboard.sortTable('name');
+                });
+            }
+            
+            // Close modals when clicking overlay
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal-overlay')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Close modals with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay').forEach(function(modal) {
+                        modal.style.display = 'none';
+                    });
+                }
+            });
+            
+            console.log('=== All Event Listeners Bound ===');
+        });
+    </script>
+
     <!-- Register Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+            window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker registered'))
-                    .catch(err => console.log('Service Worker failed:', err));
+                    .then(function(reg) {
+                        console.log('Service Worker registered');
+                    })
+                    .catch(function(err) {
+                        console.log('Service Worker failed:', err);
+                    });
             });
         }
     </script>

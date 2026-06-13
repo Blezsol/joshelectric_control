@@ -9,8 +9,8 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "assets/logo.svg",
-            "sizes": "any",
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='30' fill='%231e3a8a'/%3E%3Ctext x='100' y='135' text-anchor='middle' fill='white' font-size='120' font-weight='900' font-family='Arial'%3EJ%3C/text%3E%3Ccircle cx='160' cy='50' r='18' fill='%23f59e0b'/%3E%3C/svg%3E",
+            "sizes": "200x200",
             "type": "image/svg+xml",
             "purpose": "any maskable"
         }
