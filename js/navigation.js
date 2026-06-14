@@ -1,88 +1,117 @@
 // ============================================
 // JOSH ELECTRIC CONTROL - NAVIGATION SYSTEM
+// Fully Responsive for Mobile
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    initNavigation();
     initMobileMenu();
-    initDropdowns();
-    setupKeyboardShortcuts();
+    initMobileDropdowns();
+    initSidebarToggle();
+    initUserDropdown();
     updateDateTime();
     setInterval(updateDateTime, 60000);
+    highlightActivePage();
+    createMobileOverlay();
 });
-
-function initNavigation() {
-    // Highlight active page
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && currentPath.includes(href.replace('../', '').replace('pages/', ''))) {
-            link.classList.add('active');
-        }
-    });
-    
-    // Back button handling
-    window.addEventListener('popstate', function() {
-        location.reload();
-    });
-}
 
 function initMobileMenu() {
     const mobileToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('sidebar');
     const mainNav = document.getElementById('mainNav');
+    const overlay = document.getElementById('mobileNavOverlay');
     
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', function() {
-            if (sidebar) {
-                sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
-            }
-            if (mainNav) {
-                mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+    if (mobileToggle && mainNav) {
+        mobileToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = mainNav.classList.contains('show');
+            
+            // Close sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) sidebar.classList.remove('show');
+            
+            // Toggle nav
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                mainNav.classList.add('show');
+                if (overlay) overlay.classList.add('show');
+                mobileToggle.innerHTML = '<i class="fas fa-times"></i>';
             }
         });
     }
     
-    // Close mobile menu when clicking outside
+    // Close when clicking overlay
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            closeMobileMenu();
+        });
+    }
+    
+    // Close when clicking outside
     document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-            if (!e.target.closest('.top-navbar') && !e.target.closest('#mobileMenuToggle')) {
-                if (sidebar) sidebar.style.display = 'none';
-                if (mainNav) mainNav.style.display = 'none';
+        if (mainNav && mainNav.classList.contains('show')) {
+            if (!e.target.closest('#mainNav') && !e.target.closest('#mobileMenuToggle')) {
+                closeMobileMenu();
             }
+        }
+    });
+    
+    // Close on window resize (if going to desktop)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 900 && mainNav && mainNav.classList.contains('show')) {
+            closeMobileMenu();
         }
     });
 }
 
-function initDropdowns() {
-    // Handle dropdown hover for desktop
-    const dropdowns = document.querySelectorAll('.nav-dropdown');
+function closeMobileMenu() {
+    const mainNav = document.getElementById('mainNav');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const mobileToggle = document.getElementById('mobileMenuToggle');
     
-    dropdowns.forEach(dropdown => {
-        const toggle = dropdown.querySelector('.dropdown-toggle');
-        const menu = dropdown.querySelector('.dropdown-menu');
-        
-        if (toggle && menu) {
-            // For mobile: click to toggle
-            toggle.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-                }
-            });
-        }
+    if (mainNav) mainNav.classList.remove('show');
+    if (overlay) overlay.classList.remove('show');
+    if (mobileToggle) mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+}
+
+function initMobileDropdowns() {
+    document.querySelectorAll('.nav-dropdown .dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 900) {
+                e.preventDefault();
+                e.stopPropagation();
+                const dropdown = this.closest('.nav-dropdown');
+                dropdown.classList.toggle('active');
+            }
+        });
     });
+}
+
+function initSidebarToggle() {
+    // Sidebar toggle is handled by mobile-menu-toggle
+    // Additional: Close sidebar when clicking main content on mobile
+    const mainContent = document.querySelector('.main-content');
+    const sidebar = document.getElementById('sidebar');
     
-    // User dropdown
+    if (mainContent && sidebar) {
+        mainContent.addEventListener('click', function(e) {
+            if (window.innerWidth <= 900 && sidebar.classList.contains('show')) {
+                if (!e.target.closest('#sidebar') && !e.target.closest('#mobileMenuToggle')) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+    }
+}
+
+function initUserDropdown() {
     const userMenuBtn = document.getElementById('userMenuBtn');
     const userDropdown = document.getElementById('userDropdown');
     
     if (userMenuBtn && userDropdown) {
         userMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+            userDropdown.style.display = 
+                userDropdown.style.display === 'block' ? 'none' : 'block';
         });
         
         document.addEventListener('click', function() {
@@ -91,35 +120,22 @@ function initDropdowns() {
     }
 }
 
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+S - Save Session
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            if (typeof dashboard !== 'undefined' && dashboard.saveSession) {
-                dashboard.saveSession();
-            }
-        }
-        
-        // Ctrl+E - Export CSV
-        if (e.ctrlKey && e.key === 'e') {
-            e.preventDefault();
-            if (typeof dashboard !== 'undefined' && dashboard.exportCSV) {
-                dashboard.exportCSV();
-            }
-        }
-        
-        // Ctrl+P - Export PDF
-        if (e.ctrlKey && e.key === 'p' && !e.shiftKey) {
-            e.preventDefault();
-            if (typeof dashboard !== 'undefined' && dashboard.exportPDF) {
-                dashboard.exportPDF();
-            }
-        }
-        
-        // Escape - Close modals
-        if (e.key === 'Escape') {
-            closeAllModals();
+function createMobileOverlay() {
+    // Create overlay if it doesn't exist
+    if (!document.getElementById('mobileNavOverlay')) {
+        const overlay = document.createElement('div');
+        overlay.id = 'mobileNavOverlay';
+        overlay.className = 'mobile-nav-overlay';
+        document.body.appendChild(overlay);
+    }
+}
+
+function highlightActivePage() {
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && currentPath.includes(href.replace('../', '').replace('pages/', ''))) {
+            link.classList.add('active');
         }
     });
 }
@@ -129,9 +145,9 @@ function updateDateTime() {
     if (dateTimeEl) {
         const now = new Date();
         const options = { 
-            weekday: 'long', 
+            weekday: 'short', 
             year: 'numeric', 
-            month: 'long', 
+            month: 'short', 
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
@@ -140,41 +156,5 @@ function updateDateTime() {
     }
 }
 
-function closeAllModals() {
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.style.display = 'none';
-    });
-    
-    const userDropdown = document.getElementById('userDropdown');
-    if (userDropdown) userDropdown.style.display = 'none';
-}
-
-// Global modal functions
-function openLoginModal() {
-    document.getElementById('loginModal').style.display = 'flex';
-}
-
-function closeLoginModal() {
-    document.getElementById('loginModal').style.display = 'none';
-}
-
-function openRegisterModal() {
-    document.getElementById('registerModal').style.display = 'flex';
-}
-
-function closeRegisterModal() {
-    document.getElementById('registerModal').style.display = 'none';
-}
-
-// Close modals when clicking overlay
-window.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal-overlay')) {
-        e.target.style.display = 'none';
-    }
-});
-
-// Export for global use
-window.openLoginModal = openLoginModal;
-window.closeLoginModal = closeLoginModal;
-window.openRegisterModal = openRegisterModal;
-window.closeRegisterModal = closeRegisterModal;
+// Expose functions globally
+window.closeMobileMenu = closeMobileMenu;
