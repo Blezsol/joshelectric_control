@@ -34,7 +34,6 @@ function closeRegisterModal() {
     }
 }
 
-// Make modal functions globally accessible
 window.openLoginModal = openLoginModal;
 window.closeLoginModal = closeLoginModal;
 window.openRegisterModal = openRegisterModal;
@@ -74,6 +73,7 @@ window.showNotification = showNotification;
 var AuthManager = function() {
     this.currentUser = null;
     this.users = [];
+    this.initialized = false;
     this.init();
 };
 
@@ -85,6 +85,7 @@ AuthManager.prototype.init = function() {
     this.setupUserMenu();
     this.setupSignOut();
     this.updateUI();
+    this.initialized = true;
     console.log('AuthManager: Initialized. Logged in:', this.isLoggedIn());
 };
 
@@ -98,7 +99,6 @@ AuthManager.prototype.loadUsers = function() {
         }
     }
 
-    // Create demo users if none exist
     if (!this.users || this.users.length === 0) {
         this.users = [
             {
@@ -138,7 +138,6 @@ AuthManager.prototype.loadUsers = function() {
 };
 
 AuthManager.prototype.loadCurrentUser = function() {
-    // Check remembered user first
     var remembered = localStorage.getItem('joshelectric_remembered');
     if (remembered) {
         try {
@@ -150,7 +149,6 @@ AuthManager.prototype.loadCurrentUser = function() {
         }
     }
 
-    // Check current user
     var saved = localStorage.getItem('joshelectric_current_user');
     if (saved) {
         try {
@@ -170,10 +168,8 @@ AuthManager.prototype.saveUsers = function() {
 AuthManager.prototype.setupForms = function() {
     var self = this;
 
-    // Login Form
     var loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        // Remove existing listeners by cloning
         var newForm = loginForm.cloneNode(true);
         loginForm.parentNode.replaceChild(newForm, loginForm);
         loginForm = newForm;
@@ -189,7 +185,6 @@ AuthManager.prototype.setupForms = function() {
         console.log('Login form listener attached');
     }
 
-    // Register Form
     var registerForm = document.getElementById('registerForm');
     if (registerForm) {
         var newRegForm = registerForm.cloneNode(true);
@@ -210,14 +205,12 @@ AuthManager.prototype.setupForms = function() {
     }
 };
 
-// ===== SETUP USER MENU (THE FIX) =====
 AuthManager.prototype.setupUserMenu = function() {
     var self = this;
     var userMenuBtn = document.getElementById('userMenuBtn');
     var userDropdown = document.getElementById('userDropdown');
 
     if (userMenuBtn && userDropdown) {
-        // Remove existing listeners
         var newBtn = userMenuBtn.cloneNode(true);
         userMenuBtn.parentNode.replaceChild(newBtn, userMenuBtn);
         userMenuBtn = newBtn;
@@ -238,7 +231,6 @@ AuthManager.prototype.setupUserMenu = function() {
             }
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.user-menu')) {
                 var dropdown = document.getElementById('userDropdown');
@@ -248,7 +240,6 @@ AuthManager.prototype.setupUserMenu = function() {
             }
         });
 
-        // Close dropdown on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 var dropdown = document.getElementById('userDropdown');
@@ -267,7 +258,6 @@ AuthManager.prototype.setupUserMenu = function() {
     }
 };
 
-// ===== SETUP SIGN OUT =====
 AuthManager.prototype.setupSignOut = function() {
     var self = this;
     var signOutBtn = document.getElementById('signOutBtn');
@@ -315,7 +305,6 @@ AuthManager.prototype.login = function(email, password, remember) {
         this.updateUI();
         closeLoginModal();
 
-        // Clear form
         var loginEmail = document.getElementById('loginEmail');
         var loginPassword = document.getElementById('loginPassword');
         if (loginEmail) loginEmail.value = '';
@@ -323,7 +312,6 @@ AuthManager.prototype.login = function(email, password, remember) {
 
         showNotification('Welcome back, ' + user.firstName + '!', 'success');
 
-        // Reload dashboard
         setTimeout(function() {
             if (typeof dashboard !== 'undefined') {
                 dashboard.loadPastProjects();
@@ -349,7 +337,6 @@ AuthManager.prototype.register = function(firstName, lastName, email, password, 
         return;
     }
 
-    // Check if email exists
     var exists = false;
     for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].email === email) {
@@ -383,7 +370,6 @@ AuthManager.prototype.register = function(firstName, lastName, email, password, 
     this.updateUI();
     closeRegisterModal();
 
-    // Clear form
     var regFirstName = document.getElementById('regFirstName');
     var regLastName = document.getElementById('regLastName');
     var regEmail = document.getElementById('regEmail');
@@ -402,7 +388,6 @@ AuthManager.prototype.logout = function() {
     localStorage.removeItem('joshelectric_current_user');
     localStorage.removeItem('joshelectric_remembered');
     
-    // Close user dropdown
     var userDropdown = document.getElementById('userDropdown');
     if (userDropdown) userDropdown.style.display = 'none';
     
@@ -436,7 +421,6 @@ AuthManager.prototype.updateUI = function() {
     console.log('Updating UI. Logged in:', this.isLoggedIn());
 
     if (this.isLoggedIn()) {
-        // User IS logged in
         if (notLoggedIn) {
             notLoggedIn.style.display = 'none';
         }
@@ -464,7 +448,6 @@ AuthManager.prototype.updateUI = function() {
             if (welcomeUser) welcomeUser.textContent = user.firstName + ' ' + user.lastName;
         }
     } else {
-        // User is NOT logged in - SHOW sign in/register buttons
         if (notLoggedIn) {
             notLoggedIn.style.display = 'flex';
             notLoggedIn.style.alignItems = 'center';
@@ -479,14 +462,18 @@ AuthManager.prototype.updateUI = function() {
     }
 };
 
-// ===== INITIALIZE AUTH =====
-var auth;
+// ===== EXPOSE GLOBAL AUTH =====
+var auth = null;
 
 function initAuth() {
     console.log('Initializing Auth...');
-    auth = new AuthManager();
-    window.auth = auth;
-    console.log('Auth ready. isLoggedIn:', auth.isLoggedIn());
+    if (typeof auth === 'undefined' || auth === null) {
+        auth = new AuthManager();
+        window.auth = auth;
+        console.log('Auth ready. isLoggedIn:', auth.isLoggedIn());
+    } else {
+        console.log('Auth already initialized');
+    }
 }
 
 // Initialize when DOM is ready
@@ -495,3 +482,6 @@ if (document.readyState === 'loading') {
 } else {
     initAuth();
 }
+
+// Also expose to window immediately
+window.auth = auth;

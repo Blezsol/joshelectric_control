@@ -366,6 +366,10 @@
                             <button class="btn btn-outline" id="exportExcelBtn" type="button">
                                 <i class="fas fa-file-excel"></i> Excel
                             </button>
+                             <button class="btn btn-secondary" id="importBtn" type="button" title="Import from JSON or Excel">
+                                <i class="fas fa-file-import"></i> Import
+                            </button>
+                            <input type="file" id="importFileInput" accept=".json,.xlsx,.xls" style="display:none;">
                         </div>
                         <button class="btn btn-warning" id="saveSessionBtn" type="button">
                             <i class="fas fa-save"></i> Save Session
@@ -514,7 +518,7 @@
     <!-- PDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Application Scripts -->
     <script src="js/config.js"></script>
     <script src="js/database.js"></script>
