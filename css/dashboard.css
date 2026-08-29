@@ -1438,3 +1438,34 @@ hr {
     .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
     body { background: white; font-size: 11px; }
 }
+/* Logo Image Styling */
+.brand-logo img {
+    max-height: 36px;
+    width: auto;
+    border-radius: 8px;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.brand-logo img:hover {
+    transform: scale(1.02);
+}
+
+/* Loading Screen Logo */
+.loading-logo img {
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+}
+
+/* Responsive Logo */
+@media (max-width: 768px) {
+    .brand-logo img {
+        max-height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-logo img {
+        max-height: 24px;
+    }
+}
